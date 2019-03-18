@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments :: head"></div>
+
+<body>
+<div th:replace="fragments :: navbar"></div>
+	<div class="login-clean">
+		
+		<!-- forma -->
+		<form style="width:800px; max-width:800px;">
+			<table style="width:100%;">
+				<h2 th:text="#{msg.administration.wallets}">Novčanici</h2>
+				<thead>
+					<tr>
+						<th th:text="#{msg.search.name}"> Naziv </th>
+						<th th:text="#{msg.search.date}"> Datum </th>
+						<th th:text="#{msg.owner}"> Vlasnik </th>
+						<th> ID </th>
+						<th>  </th>
+						<th>  </th>
+					</tr>
+				</thead>
+				<tbody>
+				<tr th:if="${wallets.empty}">
+					<td colspan="2" th:text="#{msg.noExpenses}"> Nema troškova </td>
+				</tr>
+				<tr th:each="wallet : ${wallets}">
+					<td><span th:text="${wallet.name}"> Naziv </span></td>
+					<td><span th:text="${wallet.convertDate()}"> Iznos </span></td>
+					<td><span th:text="${wallet.username}"> Vrsta </span></td>
+					<td><span th:text="${wallet.id}"> Datum </span></td>
+					<td><a th:href="@{/resetwalletbyusername?id=}+${wallet.id}" class="btn btn-warning btn-block" style="margin: 0px;" th:text="#{msg.reset}">Resetiraj</a></td>
+					<td><a th:href="@{/delete?id=}+${wallet.id}" class="btn btn-danger btn-block" style="margin: 5px;" th:text="#{msg.delete}">Obriši</a></td>
+				</tr>
+				</tbody>
+			</table>
+			
+		</form>
+		
+	</div>
+	<div th:replace="fragments :: scripts"></div>
+</body>
+</html>

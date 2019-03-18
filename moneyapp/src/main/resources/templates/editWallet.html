@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:replace="fragments :: head"></div>
+
+<body>
+	<div class="login-clean">
+		
+		<!-- forma -->
+		<form name='f' th:action="@{/saveEdited}" method="post" th:object=${wallet}>
+			<h3>Edit walleta</h3>
+			<label>Naziv:</label>
+			<input class="form-control" th:field="*{name}" type="text" placeholder="Večera">
+			<label>Vlasnik:</label>
+			<input class="form-control" th:field="*{username}" type="text" placeholder="Večera">
+			<input class="form-control" th:field="*{id}" type="text" placeholder="Večera" hidden>
+			<div class="form-group">
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+				<button class="btn btn-success btn-block" type="submit">Spremi</button>
+				<a th:href="@{/home}" class="btn btn-danger btn-block">Odustani</a>
+			</div>
+		</form>
+	</div>
+	<div th:replace="fragments :: scripts"></div>
+</body>
+</html>

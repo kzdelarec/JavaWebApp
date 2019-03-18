@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments :: head"></div>
+
+<body>
+<div th:replace="fragments :: navbar"></div>
+	<div class="login-clean">
+		
+		<!-- forma -->
+		<form>
+		
+		
+			<div class="form-group" th:object="${transaction}">
+				<p th:text="#{msg.trans.confirmation(*{name},*{value} )}"/>
+				<p th:text="#{msg.trans.date(*{xy.desc},${expense.convertDate()})}"/>
+				<p th:text="#{msg.info.balance(${wallet.name}, ${wallet.calculateWallet()})}"/>
+				
+				<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/resetWallet}" class="btn btn-danger btn-block" th:text="#{msg.resetWallet}">Resetiraj novčanik</a>
+			</div>
+		</form>
+	</div>
+	<div th:replace="fragments :: scripts"></div>
+</body>
+</html>

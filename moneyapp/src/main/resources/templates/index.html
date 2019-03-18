@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments :: head"></div>
+
+<body>
+<div th:replace="fragments :: navbar"></div>
+	<div class="login-clean">
+
+		<!-- forma -->
+		<form style="max-width:800px;" th:action="@{/home}" method="post">
+			<div th:if="${param.error}">
+				<div class="alert alert-danger">
+					 <span th:text="#{msg.error}">Nije moguće izvršiti radnju!</span>
+				</div>
+			</div>
+			<div>
+				<div>
+					<h2 style="width:50%; margin:0; display: inline;" th:text="#{msg.index.myWallet}">Moj račun</h2>
+					<a style="display:inline;" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/resetWallet}" class="btn btn-danger btn-block" th:text="#{msg.resetWallet}">Resetiraj novčanik</a>
+				</div>
+				<span th:text="#{msg.balance}">Stanje: </span> <span th:text="${total}" th:classappend="${total.contains('-')} ? bad : good"></span>
+			</div>
+			<div>
+				<div class="input-group md-form form-sm form-2 pl-0" style="margin: 15px 0;">
+					<select class="form-controll" id="izbor" onchange="zamjeni()">
+					<option value="Naziv" th:text="#{msg.search.name}">Naziv</option>
+					<option value="Vrsta" th:text="#{msg.search.type}">Vrsta</option>
+					<option value="Datum" th:text="#{msg.search.date}">Datum</option>
+				</select>
+					<select class="form-control lime-border" id="vrsta" name ="vrsta" hidden>
+					<option value="" th:text="#{msg.list.default}">---Odaberite vrijednost---</option>
+					<option th:each="expenseType : ${type}"
+						th:value="${expenseType}"
+						th:text="${expenseType.desc}"
+						th:selected="${xy}"></option>
+				</select>
+					<input class="form-control lime-border" type="date" name="searchDate" id="date" data-date-format="YYYY-MM-DD" hidden>
+					<input class="form-control lime-border" type="text" th:placeholder="#{msg.searchTransactions}" name="searchName" id="ime">
+					<div class="input-group-append">
+						<button class="input-group-text btn lime lighten-2" id="basic-text1" type="submit">
+							<i class="fa fa-search text-grey"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			<table style="width:100%;">
+			    <thead>
+			        <tr>
+			            <th th:text="#{msg.search.name}"> Naziv </th>
+			            <th th:text="#{msg.price}"> Iznos </th>
+			            <th th:text="#{msg.search.type}"> Vrsta </th>
+			            <th th:text="#{msg.search.date}"> Datum </th>
+			            <th></th>
+			            <th></th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			    <tr th:if="${expenses.empty}" >
+			            <td colspan="2" th:text="#{msg.noExpenses}"> Nema troškova </td>
+			        </tr>
+			        <tr th:if="${!expenses.empty}" th:each="expense : ${expenses}" th:classappend="${expense.type =='expense'} ? red : green">
+			            <td style="padding: 5px;"><span th:text="${expense.name}"> Naziv </span></td>
+			            <td><span th:text="${expense.type == 'expense'} ? '-' + ${expense.value} : ${expense.value}"> Iznos </span></td>
+			            <td><span th:text="${expense.xy.desc}"> Vrsta </span></td>
+			            <td><span th:text="${expense.convertDate()}"> Datum </span></td>
+						<td style="padding: 5px;"><a href="#" class="btn btn-info btn-block" ><i class="fa fa-pencil"></i></a></td>
+						<td style="padding: 5px;"><a href="#" class="btn btn-danger btn-block" ><i class="fa fa-trash"></i></a></td>
+			        </tr>
+			    </tbody>
+			</table>
+			
+		</form>
+		
+	</div>
+	<div th:replace="fragments :: scripts"></div>
+	<script type="text/javascript">
+		function zamjeni(){
+			debugger;
+			var vrsta = document.getElementById("vrsta");
+			var ime = document.getElementById("ime");
+			var datum = document.getElementById("date");
+			var strIzbor = document.getElementById("izbor").value;
+			
+			
+			if(strIzbor==="Vrsta"){
+				ime.setAttribute("hidden", true);
+				datum.setAttribute("hidden", true);
+				vrsta.removeAttribute("hidden");;
+			} else if (strIzbor==="Naziv"){
+				ime.removeAttribute("hidden");;
+				vrsta.setAttribute("hidden", true);
+				datum.setAttribute("hidden", true);
+			} else {
+				datum.removeAttribute("hidden");;
+				vrsta.setAttribute("hidden", true);
+				ime.setAttribute("hidden", true);
+			}
+		}
+	</script>
+</body>
+</html>

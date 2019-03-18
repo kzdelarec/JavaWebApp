@@ -1,0 +1,100 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+<head th:fragment="head">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keep the Change</title>
+<link rel="icon" th:href="@{/assets/img/favicon.ico}" type="ico"
+	sizes="16x16">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/assets/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/assets/css/Login-Form-Clean.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/assets/css/styles.css}">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<nav th:fragment="navbar" class="navbar navbar-expand-sm bg-light ">
+	<div class="navbar-brand">
+		<img class="img-fluid d-inline-block" id="logo"
+			th:src="@{/assets/img/logo.png}">
+
+	</div>
+	<ul class="navbar-nav ml-auto">
+		<li class="nav-item"><a th:href="@{/home}"
+			class="btn btn-info btn-block" th:text="#{msg.nav.home}">Početna</a></li>
+
+		<li class="nav-item"><a th:href="@{/expense/new}"
+			class="btn btn-info btn-block" th:text="#{msg.nav.newExpense}">Novi trošak</a></li>
+		<li class="nav-item"><a th:href="@{/transaction/new}"
+			class="btn btn-info btn-block" th:text="#{msg.nav.newTransaction}">Nova uplata</a></li>
+
+		<li class="nav-item"><a sec:authorize="hasRole('ROLE_ADMIN')"
+			th:href="@{/allExpenses}" class="btn btn-info btn-block" th:text="#{msg.nav.allExpenses}">Svi
+				troškovi</a></li>
+
+		<li class="nav-item"><a sec:authorize="hasRole('ROLE_ADMIN')"
+			th:href="@{/administration}" class="btn btn-info btn-block" th:text="#{msg.nav.administration}">Administracija</a>
+		</li>
+		
+		
+		
+	
+		<div style="padding-left: 10px; padding-top: 5px; padding-right: 10px;" class="nav-item">
+			<span sec:autorize="isAuthenticated()" th:text="#{msg.nav.signInfo}">Prijavljeni ste kao </span><span
+				sec:authentication="name"></span> <a th:href="@{/logout}"
+				class="btn btn-warning btn-sm" style="width: 35%; display: inline;" th:text="#{msg.nav.logout}">Odjavi
+				se</a>
+		</div>
+	
+		<li class="nav-item">
+				<select id="locales"> 
+					<option value="hr" th:selected="${#locale.language == 'hr'}" th:text="#{msg.lang.hr}"></option> 
+					<option value="en" th:selected="${#locale.language == 'en'}" th:text="#{msg.lang.en}"></option>
+					<option value="fr" th:selected="${#locale.language == 'fr'}" th:text="#{msg.lang.fr}"></option> 
+				</select>
+		</li>
+	</ul>
+</nav>
+
+<div th:fragment="scripts">
+	<script th:src="@{/assets/js/jquery.min.js}"></script>
+	<script th:src="@{/assets/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript">
+		$(document).ready(function() { 
+			$("#locales").change(function () { 
+				var selectedOption = $('#locales').val(); 
+				if (selectedOption != ''){ 
+					window.location.replace('?language=' + selectedOption); 
+				} 
+			});
+		});
+		
+	</script>
+</div>
+
+
+
+<div th:fragment="logout" style="margin-bottom: 20px;">
+	<span sec:autorize="isAuthenticated()">Prijavljeni ste kao <span
+		sec:authentication="name"></span></span> <a th:href="@{/logout}"
+		class="btn btn-warning btn-inline-block" style="width: 35%">Odjavi
+		se</a>
+</div>
+
+</body>
+</html>

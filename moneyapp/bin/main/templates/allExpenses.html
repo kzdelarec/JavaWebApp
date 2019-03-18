@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments :: head"></div>
+
+<body>
+<div th:replace="fragments :: navbar"></div>
+	<div class="login-clean">
+		
+		<!-- forma -->
+		<form style="width:800px; max-width:800px;">
+			<div th:each="wallet : ${wallets}" id="report">
+			
+				<table style="width:100%;" >
+					<h2 th:text="#{msg.all.wallet} + ' ' + ${wallet.name}">Novčanik</h2>
+					<thead>
+						<tr>
+							<th th:text="#{msg.search.name}"> Naziv </th>
+							<th th:text="#{msg.search.date}"> Datum </th>
+							<th th:text="#{msg.owner}"> Vlasnik </th>
+							<th> ID </th>
+							<th th:text="#{msg.all.balance}"> Stanje</th>
+						 </tr>
+					</thead>
+					<tbody>
+						<tr th:if="${wallets.empty}">
+							<td colspan="2" th:text="#{msg.noExpenses}"> Nema troškova </td>
+						</tr>
+				
+						<tr>
+							<td><span th:text="${wallet.name}"> Naziv </span></td>
+							<td><span th:text="${wallet.convertDate()}"> Iznos </span></td>
+							<td><span th:text="${wallet.username}"> Vrsta </span></td>
+							<td><span th:text="${wallet.id}"> Datum </span></td>
+							<td><span th:text="${wallet.calculateWallet()}" name="stanje"></span></td>
+						</tr>
+					</tbody>
+				</table>
+				<table style="width:100%;" >
+					<h5 id="h5">Troškovi</h5>
+					<thead>
+						<tr>
+							<th th:text="#{msg.search.name}"> Naziv </th>
+							<th th:text="#{msg.price}"> Iznos </th>
+							<th th:text="#{msg.search.type}"> Vrsta </th>
+							<th th:text="#{msg.search.date}"> Datum </th>
+							<th th:text="#{msg.walletId}"> Id novčanika </th>
+							<th th:text="#{msg.transactionType}"> Vrsta transakcjie</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${wallet.getExpenses().empty}">
+							<td colspan="2" th:text="#{msg.noExpenses}"> Nema troškova </td>
+						</tr>
+						<tr th:if="${wallet.getExpenses()}" th:each="expense : ${wallet.getExpenses()}" th:classappend="${expense.type =='expense'} ? red : green">
+							<td><span th:text="${expense.name}"> Naziv </span></td>
+							<td><span th:text="${expense.type == 'expense'} ? '-' + ${expense.value} : ${expense.value}"> Iznos </span></td>
+							<td><span th:text="${expense.xy.desc}"> Vrsta </span></td>
+							<td><span th:text="${expense.convertDate()}"> Datum </span></td>
+							<td><span th:text="${expense.walletId}"> Id novčanika </span></td>
+							<td><span th:text="${expense.type}"> Id novčanika </span></td>
+						</tr>
+					
+					</tbody>
+				</table>
+				<hr id="hr">
+			</div>
+			
+		</form>
+		
+	</div>
+	<div th:replace="fragments :: scripts"></div>
+	<script type="text/javascript">
+		var values = document.getElementsByName("stanje");
+		
+		for(var i = 0; i < values.length; i++){
+			if(values[i].innerText.includes("-")){
+				values[i].classList.add("bad");
+			} else {
+				values[i].classList.add("good");
+			}
+		}
+	</script>
+</body>
+</html>
